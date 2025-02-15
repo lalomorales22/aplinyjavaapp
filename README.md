@@ -1,8 +1,12 @@
 # A Pliny Java App
-![Screenshot 2025-02-15 at 12 00 54 PM](https://github.com/user-attachments/assets/80468acc-ff7b-40da-905a-4d20f416fdb8)
 
-![Screenshot 2025-02-15 at 12 01 14 PM](https://github.com/user-attachments/assets/4e7b3f3c-228b-4003-954b-59c9898d32cb)
-![Screenshot 2025-02-15 at 12 01 05 PM](https://github.com/user-attachments/assets/e3f9e01a-665e-46ab-803e-8646f39975a1)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/80468acc-ff7b-40da-905a-4d20f416fdb8" alt="Screenshot 2025-02-15 at 12 00 54 PM">
+</div>
+
+![Screenshot 2025-02-15 at 12 05 26 PM](https://github.com/user-attachments/assets/d5b6387c-a3e4-4ef3-a770-e7cc9390a43c)
+
+![Screenshot 2025-02-15 at 12 05 26 PM](https://github.com/user-attachments/assets/d5b6387c-a3e4-4ef3-a770-e7cc9390a43c)
 
 
 A black-and-red themed Java project paying tribute to **Elder Plinius** and his inquisitive spirit, now fully adapted for AI exploration and interactive experiences.  
