@@ -11,14 +11,14 @@ import javax.swing.plaf.metal.*;
  * A Swing-based GUI that scans a directory for .mkd files,
  * displays them as large black/red buttons on the left (2 columns, many rows),
  * shows the file contents in the center,
- * and has an ASCII rain panel on the right.
+ * and has a right sidebar that can be toggled/resized. Uses JSplitPane.
  */
 public class PlinyMkdsApp extends JFrame {
 
     private final JPanel buttonPanel;
     private final JTextArea textArea;
     private final JLabel asciiLabelTop;
-    private final ASCIIRainPanel rainPanel;
+    private final SidebarPanel sidebarPanel;
 
     // Path to .mkd files
     private static final String MKD_FOLDER_PATH = "/Users/megabrain/Desktop/aPlinyJavaApp/L1B3RT4S";
@@ -40,36 +40,63 @@ public class PlinyMkdsApp extends JFrame {
         asciiLabelTop.setHorizontalAlignment(SwingConstants.CENTER);
         asciiLabelTop.setForeground(Color.RED);
 
-        // Main layout
-        getContentPane().setLayout(new BorderLayout());
-
-        // ======== LEFT PANEL (NO SCROLLBARS), 2 COLUMNS ========
-        buttonPanel = new JPanel();
-        // GridLayout(0, 2) = unlimited rows, 2 columns
-        buttonPanel.setLayout(new GridLayout(0, 2)); 
+        // Build the left panel (buttonPanel) for .mkd files
+        buttonPanel = new JPanel(new GridLayout(0, 2));
         buttonPanel.setBackground(Color.BLACK);
-        // Give it a preferred width so it’s clearly visible
         buttonPanel.setPreferredSize(new Dimension(400, 0));
-        // Add directly to WEST without a JScrollPane (no scrollbars)
-        getContentPane().add(buttonPanel, BorderLayout.WEST);
 
-        // ======== TEXT AREA (Center) ========
+        // Build the center text area
         textArea = new JTextArea();
+        textArea.setEditable(false);
         StyleUtil.styleTextArea(textArea);
+
+        // Right-click context menu
+        textArea.setComponentPopupMenu(createTextAreaContextMenu());
+
         JScrollPane scrollPane = new JScrollPane(textArea);
         StyleUtil.styleScrollPane(scrollPane);
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        // ======== ASCII RAIN (Right) ========
-        rainPanel = new ASCIIRainPanel();
-        // Give it a preferred width so it shows as a sidebar
-        rainPanel.setPreferredSize(new Dimension(300, 0));
-        getContentPane().add(rainPanel, BorderLayout.EAST);
+        // Build the right sidebar panel (Matrix / AI Chat)
+        sidebarPanel = new SidebarPanel();
+        sidebarPanel.setPreferredSize(new Dimension(300, 0));
 
-        // ======== TOP LABEL (North) ========
+        // ============== SETUP SPLIT PANES ==============
+
+        // 1) centerContainer holds the text area
+        JPanel centerContainer = new JPanel(new BorderLayout());
+        centerContainer.add(scrollPane, BorderLayout.CENTER);
+
+        // 2) Split for center vs. right sidebar
+        JSplitPane centerRightSplit = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,
+            centerContainer,
+            sidebarPanel
+        );
+        centerRightSplit.setResizeWeight(0.75);
+        centerRightSplit.setOneTouchExpandable(true);
+        centerRightSplit.setBorder(null);
+        centerRightSplit.setDividerSize(5);
+
+        // 3) Outer split for left panel vs. center+right
+        JPanel leftContainer = new JPanel(new BorderLayout());
+        leftContainer.add(buttonPanel, BorderLayout.CENTER);
+
+        JSplitPane rootSplit = new JSplitPane(
+            JSplitPane.HORIZONTAL_SPLIT,
+            leftContainer,
+            centerRightSplit
+        );
+        rootSplit.setResizeWeight(0.2);
+        rootSplit.setOneTouchExpandable(true);
+        rootSplit.setBorder(null);
+        rootSplit.setDividerSize(5);
+
+        // ============== ADD COMPONENTS TO FRAME ==============
+        getContentPane().setLayout(new BorderLayout());
         getContentPane().add(asciiLabelTop, BorderLayout.NORTH);
+        getContentPane().add(rootSplit, BorderLayout.CENTER);
 
-        // Load the .mkd files
+        // Finally, load the .mkd files
         loadMkdFiles(MKD_FOLDER_PATH);
     }
 
@@ -147,17 +174,17 @@ public class PlinyMkdsApp extends JFrame {
         JMenu panelsMenu = new JMenu("Panels");
         panelsMenu.setForeground(Color.RED);
 
-        JMenuItem toggleRain = new JMenuItem("Toggle ASCII Rain");
-        toggleRain.addActionListener(e -> {
-            if(rainPanel.isVisible()) {
-                rainPanel.setVisible(false);
-                rainPanel.stopRain();
+        // Toggle entire sidebar
+        JMenuItem toggleSidebar = new JMenuItem("Toggle Right Sidebar");
+        toggleSidebar.addActionListener(e -> {
+            if (sidebarPanel.isVisible()) {
+                sidebarPanel.setVisible(false);
+                sidebarPanel.stopAll(); // stop ASCII rain if needed
             } else {
-                rainPanel.setVisible(true);
-                rainPanel.startRain();
+                sidebarPanel.setVisible(true);
             }
         });
-        panelsMenu.add(toggleRain);
+        panelsMenu.add(toggleSidebar);
 
         // "Tribute" menu
         JMenu tributeMenu = new JMenu("Tribute");
@@ -184,6 +211,25 @@ public class PlinyMkdsApp extends JFrame {
     }
 
     /**
+     * Right-click menu for the main text area (so you can copy, select all).
+     */
+    private JPopupMenu createTextAreaContextMenu() {
+        JPopupMenu menu = new JPopupMenu();
+
+        // Copy
+        JMenuItem copyItem = new JMenuItem("Copy");
+        copyItem.addActionListener(e -> textArea.copy());
+        menu.add(copyItem);
+
+        // Select All
+        JMenuItem selectAllItem = new JMenuItem("Select All");
+        selectAllItem.addActionListener(e -> textArea.selectAll());
+        menu.add(selectAllItem);
+
+        return menu;
+    }
+
+    /**
      * Loads all .mkd files from the specified folder
      * and creates a button for each one in the left panel.
      */
@@ -206,7 +252,7 @@ public class PlinyMkdsApp extends JFrame {
             StyleUtil.styleButton(btn);
             btn.setToolTipText("Click to view " + mkdFile.getName());
 
-            // On click, load the file content into the text area
+            // On click, load file content
             btn.addActionListener(e -> {
                 SoundEffects.playKeyClick();
                 String content = FileLoader.loadFileContent(mkdFile);
@@ -232,9 +278,6 @@ public class PlinyMkdsApp extends JFrame {
 
             PlinyMkdsApp frame = new PlinyMkdsApp();
             frame.setVisible(true);
-
-            // Start the ASCII rain if desired
-            frame.rainPanel.startRain();
         });
     }
 }

@@ -9,42 +9,83 @@ import javax.swing.*;
  *
  * Displays a continuous "ASCII rain" of random characters,
  * in red to match the Pliny tribute theme.
+ * Now forces zero insets and uses ceil for row/col calculations.
  */
 public class ASCIIRainPanel extends JPanel {
 
-    private final int numColumns = 100;  // number of columns
-    private final int numRows = 40;      // number of rows
-    private final char[][] rain;
+    private char[][] rain;
+    private int rows;
+    private int cols;
     private final Random random;
     private final Timer timer;
 
     public ASCIIRainPanel() {
+        // Force black background and red foreground
         setBackground(Color.BLACK);
         setForeground(Color.RED);
+
+        // Force a known monospaced font so we can reliably measure width/height
+        setFont(new Font("Monospaced", Font.PLAIN, 12));
+
         random = new Random();
-        rain = new char[numRows][numColumns];
 
-        // initialize random chars
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numColumns; c++) {
-                rain[r][c] = randomChar();
-            }
-        }
+        // Initialize with 0x0; actual size gets set in resizeCheck()
+        rain = new char[0][0];
 
-        // Timer updates the rain
+        // Timer updates the rain every 100ms
         timer = new Timer(100, e -> {
-            // shift rows downward
-            for (int r = numRows - 1; r > 0; r--) {
-                for (int c = 0; c < numColumns; c++) {
-                    rain[r][c] = rain[r - 1][c];
-                }
+            // Recalculate rows/cols in case of resize
+            resizeCheck();
+
+            // Shift rows downward
+            for (int r = rows - 1; r > 0; r--) {
+                System.arraycopy(rain[r - 1], 0, rain[r], 0, cols);
             }
-            // create a new row of random chars at the top
-            for (int c = 0; c < numColumns; c++) {
+            // New row of random chars at the top
+            for (int c = 0; c < cols; c++) {
                 rain[0][c] = randomChar();
             }
             repaint();
         });
+    }
+
+    /**
+     * Zero insets so the ASCII text starts at (0,0).
+     */
+    @Override
+    public Insets getInsets() {
+        return new Insets(0, 0, 0, 0);
+    }
+
+    /**
+     * Ensures our char[][] matches the available space.
+     */
+    private void resizeCheck() {
+        FontMetrics fm = getFontMetrics(getFont());
+        int charWidth = fm.charWidth('W');
+        int charHeight = fm.getHeight();
+        if (charWidth <= 0 || charHeight <= 0) {
+            return;
+        }
+
+        // Use ceiling so leftover pixels get included as an extra column or row
+        int newCols = (int) Math.ceil((double) getWidth() / charWidth);
+        int newRows = (int) Math.ceil((double) getHeight() / charHeight);
+
+        newCols = Math.max(1, newCols);
+        newRows = Math.max(1, newRows);
+
+        if (newRows != rows || newCols != cols) {
+            rows = newRows;
+            cols = newCols;
+            rain = new char[rows][cols];
+            // Fill fresh with random chars
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < cols; c++) {
+                    rain[r][c] = randomChar();
+                }
+            }
+        }
     }
 
     private char randomChar() {
@@ -55,15 +96,23 @@ public class ASCIIRainPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        // Double-check size on each paint
+        resizeCheck();
+
+        // Use the font we've already set
+        g.setFont(getFont());
         g.setColor(getForeground());
 
-        int charWidth = g.getFontMetrics().charWidth('W');
-        int charHeight = g.getFontMetrics().getHeight();
+        FontMetrics fm = g.getFontMetrics();
+        int charWidth = fm.charWidth('W');
+        int charHeight = fm.getHeight();
 
-        for (int r = 0; r < numRows; r++) {
-            for (int c = 0; c < numColumns; c++) {
-                g.drawString(String.valueOf(rain[r][c]), c * charWidth, (r + 1) * charHeight);
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                g.drawString(String.valueOf(rain[r][c]),
+                             c * charWidth,
+                             (r + 1) * charHeight);
             }
         }
     }

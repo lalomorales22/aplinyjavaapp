@@ -1,25 +1,29 @@
 # A Pliny Java App
-![Screenshot 2025-02-14 at 6 09 35 PM](https://github.com/user-attachments/assets/6a07f134-0d30-44dc-bb6a-80b549cee7cd)
 
-![Screenshot 2025-02-14 at 6 10 51 PM](https://github.com/user-attachments/assets/56cf1767-2bd8-48af-a8e9-acb043bc779c)
 
-A black-and-red themed Java project paying tribute to **Elder Plinius** and his inquisitive spirit, now adapted to AI exploration.  
-This application scans a local folder for `.mkd` files and displays them with various thematic elements:
+A black-and-red themed Java project paying tribute to **Elder Plinius** and his inquisitive spirit, now fully adapted for AI exploration and interactive experiences.  
+This application scans a local folder for `.mkd` files and displays them with various thematic elements and AI-driven features:
 
-- **Red ASCII “Rain”**  
+## Features
+- **Red ASCII “Rain”** (Matrix-inspired sidebar effect)  
 - **Blinking Console** with randomly generated Pliny/AI messages  
-- **Glitchy Pop-Up Dialogs**  
-- **Dark Red Key Sound Effects**  
-- **Theme Switcher** (multiple color schemes)  
-- **ASCII Charts, Flow Diagrams,** and a **Maze of Knowledge**  
-- **Plinian Expedition Minigame**  
-- **Tribute Panel** to Elder Plinius  
+- **Glitchy Pop-Up Dialogs** for an immersive UI experience  
+- **Dark Red Key Sound Effects** for UI interaction feedback  
+- **Theme Switcher** (multiple color schemes: Red/Black, Neon Void, Toxic Green, Windows 95)  
+- **AI Chatbot** powered by Ollama API with streaming responses  
+- **ASCII Charts & Flow Diagrams** dynamically generated in the interface  
+- **Maze of Knowledge** ASCII-based interactive game  
+- **Plinian Expedition Minigame** (Choose-your-own-adventure style game)  
+- **Tribute Panel** honoring Elder Plinius  
+- **Sidebar Toggle** between Matrix mode and AI chatbot
+- **Responsive Matrix Sidebar** that dynamically extends to fit available space  
+- **Be careful with TOKEN8OM8.mkd
 
 ## Folder Path Requirement
 
 By default, the application looks for `.mkd` files in:
 ```
-/Users/megabrain/Desktop/aPlinyJavaApp/MKD_FILES
+/Users/megabrain/Desktop/aPlinyJavaApp/L1B3RT4S
 ```
 (**Change** the `private static final String MKD_FOLDER_PATH` in `PlinyMkdsApp.java` to point wherever your `.mkd` files reside.)
 
@@ -42,8 +46,13 @@ By default, the application looks for `.mkd` files in:
    # Or run the main app directly:
    java aplinyjavaapp.PlinyMkdsApp
    ```
-7. Interact with the interface, click `.mkd` file buttons to display text, toggle the ASCII rain, play minigames, and open the tribute panel.
-
+7. Interact with the interface:
+   - Click `.mkd` file buttons to display text
+   - Toggle the ASCII rain effect
+   - Play minigames
+   - Open the tribute panel
+   - Chat with the AI assistant using real-time streaming responses (you will need to download the ollama models listed or update the OllamaChatPanel.java app with ollama models you have)
+   - Find your models jailbreak, Try!
 
 ## Disclaimer
 
