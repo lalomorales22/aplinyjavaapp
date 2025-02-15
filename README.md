@@ -6,7 +6,6 @@
 
 ![Screenshot 2025-02-15 at 12 05 26 PM](https://github.com/user-attachments/assets/d5b6387c-a3e4-4ef3-a770-e7cc9390a43c)
 
-![Screenshot 2025-02-15 at 12 05 26 PM](https://github.com/user-attachments/assets/d5b6387c-a3e4-4ef3-a770-e7cc9390a43c)
 
 
 A black-and-red themed Java project paying tribute to **Elder Plinius** and his inquisitive spirit, now fully adapted for AI exploration and interactive experiences.  
