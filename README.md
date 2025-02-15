@@ -1,4 +1,7 @@
 # A Pliny Java App
+![Screenshot 2025-02-14 at 6 09 35 PM](https://github.com/user-attachments/assets/6a07f134-0d30-44dc-bb6a-80b549cee7cd)
+
+![Screenshot 2025-02-14 at 6 10 51 PM](https://github.com/user-attachments/assets/56cf1767-2bd8-48af-a8e9-acb043bc779c)
 
 A black-and-red themed Java project paying tribute to **Elder Plinius** and his inquisitive spirit, now adapted to AI exploration.  
 This application scans a local folder for `.mkd` files and displays them with various thematic elements:
@@ -23,10 +26,10 @@ By default, the application looks for `.mkd` files in:
 ## How to Build & Run
 
 1. Clone or download this repo.
-2. Ensure you have **Java 8+**.
+2. Ensure you have **Java 8+**.  
 3. Update the `MKD_FOLDER_PATH` as described above.
 4. (Optional) Place a `.wav` file named `mechanical_key.wav` in your resource path if you want button-click sound effects.
-5. Compile the project:
+5. Compile the project: (Or Run with Visual Studio Code)
    ```bash
    cd aPlinyJavaApp
    javac *.java
@@ -41,28 +44,6 @@ By default, the application looks for `.mkd` files in:
    ```
 7. Interact with the interface, click `.mkd` file buttons to display text, toggle the ASCII rain, play minigames, and open the tribute panel.
 
-## Project Structure
-
-```
-aPlinyJavaApp/
-├─ ASCIIRainPanel.java
-├─ ASCIICharts.java
-├─ ASCIIFlowDiagram.java
-├─ AsciiMazeGame.java
-├─ BlinkingConsolePanel.java
-├─ BootSplashScreen.java
-├─ ElderKnowledgePanel.java
-├─ FileLoader.java
-├─ GlitchDialog.java
-├─ PlinianExpeditionMinigame.java
-├─ PlinyAsciiArt.java
-├─ PlinyMetalTheme.java
-├─ PlinyMkdsApp.java
-├─ README.md
-├─ SoundEffects.java
-├─ StyleUtil.java
-└─ ThemeManager.java
-```
 
 ## Disclaimer
 
